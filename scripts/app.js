@@ -1,0 +1,66 @@
+function getPin() {
+	const pin = generatePin();
+	const pinString = pin + '';
+	if (pinString.length === 4) {
+		return pin;
+	} else {
+		return getPin();
+	}
+}
+
+function generatePin() {
+	const random = Math.round(Math.random() * 10000);
+	return random;
+}
+
+document
+	.getElementById('generate-pin')
+	.addEventListener('click', function (event) {
+		const pin = getPin();
+		const displayPinField = document.getElementById(
+			'display-generated-pin'
+		);
+		displayPinField.value = pin;
+	});
+
+document
+	.getElementById('calculator')
+	.addEventListener('click', function (event) {
+		const number = event.target.innerText;
+		const typedNumbersField = document.getElementById('typed-numbers');
+		const previousTypesNumbers = typedNumbersField.value;
+		if (isNaN(number)) {
+			if (number === 'C') {
+				typedNumbersField.value = '';
+			} else if (number === '<') {
+				const digits = previousTypesNumbers.split('');
+				digits.pop();
+				const remainingDigits = digits.join('');
+				typedNumbersField.value = remainingDigits;
+			}
+		} else {
+			typedNumbersField.value += number;
+		}
+	});
+
+document
+	.getElementById('verify-pin')
+	.addEventListener('click', function (event) {
+		const displayPinField = document.getElementById(
+			'display-generated-pin'
+		);
+		const currentPin = displayPinField.value;
+		const typedNumbersField = document.getElementById('typed-numbers');
+		const typedNumber = typedNumbersField.value;
+		const pinSuccessMessage = document.getElementById('pin-success');
+		const pinFailMessage = document.getElementById('pin-fail');
+
+		if (typedNumber === currentPin) {
+			// console.log('Correct Pin');
+			pinSuccessMessage.style.display = 'block';
+			pinFailMessage.style.display = 'none';
+		} else {
+			pinSuccessMessage.style.display = 'none';
+			pinFailMessage.style.display = 'block';
+		}
+	});
